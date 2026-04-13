@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SIAKAD Mahasiswa</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>Sistem Akademik Mahasiswa</h1>
+
+    <form id="formData">
+        <input type="text" id="nama" placeholder="Nama Lengkap" required>
+        <input type="text" id="nim" placeholder="NIM" required>
+        <input type="text" id="prodi" placeholder="Program Studi" required>
+        <textarea id="alamat" placeholder="Alamat" required></textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<div class="container" id="hasil" style="display:none;">
+    <h1>Data Mahasiswa</h1>
+
+    <div class="card">
+        <p><b>Nama:</b> <span id="outNama"></span></p>
+        <p><b>NIM:</b> <span id="outNim"></span></p>
+        <p><b>Program Studi:</b> <span id="outProdi"></span></p>
+        <p><b>Alamat:</b> <span id="outAlamat"></span></p>
+    </div>
+
+    <h2>Nilai Semester Sebelumnya</h2>
+    <table id="tabelNilai"></table>
+
+    <h2>Hasil Filter Nilai</h2>
+    <div id="filter"></div>
+
+    <h2>Cetak Nilai (Rekursif)</h2>
+    <div id="rekursif"></div>
+</div>
+
+<script>
+document.getElementById("formData").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    // ambil data
+    let nama = document.getElementById("nama").value;
+    let nim = document.getElementById("nim").value;
+    let prodi = document.getElementById("prodi").value;
+    let alamat = document.getElementById("alamat").value;
+
+    // tampilkan data
+    document.getElementById("outNama").innerText = nama;
+    document.getElementById("outNim").innerText = nim;
+    document.getElementById("outProdi").innerText = prodi;
+    document.getElementById("outAlamat").innerText = alamat;
+
+    // data nilai
+    let nilai = {
+        "Algoritma Pemrograman": "B",
+        "Kewirausahaan Digital": "AB",
+        "Bahasa Inggris": "B",
+        "Pendidikan Agama": "AB",
+        "Ekonomi Micro": "B"
+    };
+
+    // tabel nilai
+    let tabel = "<tr><th>Mata Kuliah</th><th>Nilai</th></tr>";
+    for(let mk in nilai){
+        tabel += `<tr><td>${mk}</td><td>${nilai[mk]}</td></tr>`;
+    }
+    document.getElementById("tabelNilai").innerHTML = tabel;
+
+    // filter (selain AB)
+    let filterHTML = "";
+    for(let mk in nilai){
+        if(nilai[mk] !== "AB"){
+            filterHTML += `<p>${mk} : ${nilai[mk]}</p>`;
+        }
+    }
+    document.getElementById("filter").innerHTML = filterHTML;
+
+    // rekursif
+    function rekursif(arr, i=0){
+        if(i >= arr.length) return "";
+        return `<p>${arr[i]}</p>` + rekursif(arr, i+1);
+    }
+
+    let hasilRekursif = rekursif(Object.values(nilai));
+    document.getElementById("rekursif").innerHTML = hasilRekursif;
+
+    // tampilkan hasil
+    document.getElementById("hasil").style.display = "block";
+});
+</script>
+
+</body>
+</html>
